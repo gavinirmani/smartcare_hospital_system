@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCare Enterprise Portal</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+<!-- ========================================================= -->
+<!-- SIDEBAR -->
+<!-- ========================================================= -->
+
+<aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 shadow-xl">
+
+    <div>
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3 px-3 py-4 border-b border-slate-800">
+
+            <div class="bg-brand-500 text-white p-2 rounded-lg">
+                <i class="fa-solid fa-hospital fa-lg"></i>
+            </div>
+
+            <span class="font-bold text-lg text-white tracking-wide">
+                SmartCare
+            </span>
+
+        </div>
+
+        <!-- Navigation -->
+        <nav class="mt-6 flex flex-col gap-1">
+
+            <!-- Patients -->
+            <button
+                    onclick="switchTab('patients')"
+                    id="nav-patients"
+                    class="nav-btn flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-brand-600 text-white w-full"
+            >
+                <i class="fa-solid fa-user-injured w-5"></i>
+                Patients
+            </button>
+
+            <!-- Doctors -->
+            <button
+                    onclick="switchTab('doctors')"
+                    id="nav-doctors"
+                    class="nav-btn flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 text-slate-400 hover:text-white w-full"
+            >
+                <i class="fa-solid fa-user-doctor w-5"></i>
+                Doctors
+            </button>
+
+            <!-- Departments -->
+            <button
+                    onclick="switchTab('departments')"
+                    id="nav-departments"
+                    class="nav-btn flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 text-slate-400 hover:text-white w-full"
+            >
+                <i class="fa-solid fa-building w-5"></i>
+                Departments
+            </button>
+
+        </nav>
+
+    </div>
+
+    <!-- Backend status -->
+    <div class="text-xs text-slate-500 px-3">
+
+        Backend:
+
+        <span
+                id="backend-status"
+                class="text-yellow-400 font-mono"
+        >
+            Checking...
+        </span>
+
+    </div>
+
+</aside>
+
+
+<!-- ========================================================= -->
+<!-- MAIN AREA -->
+<!-- ========================================================= -->
+
+<div class="flex-1 flex flex-col overflow-y-auto">
+
+    <!-- Header -->
+    <header
+            class="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-10"
+    >
+
+        <h1
+                id="page-title"
+                class="text-xl font-bold text-slate-900"
+        >
+            Patient Directory
+        </h1>
+
+        <button
+                onclick="openModal()"
+                class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center gap-2"
+        >
+            <i class="fa-solid fa-plus"></i>
+            Add New Record
+        </button>
+
+    </header>
+
+
+    <!-- ===================================================== -->
+    <!-- MAIN CONTENT -->
+    <!-- ===================================================== -->
+
+    <main class="p-8 flex-1">
+
+        <!-- Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+            <!-- Total Records -->
+            <div
+                    class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center"
+            >
+
+                <div>
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        Total Records
+                    </p>
+
+                    <p
+                            id="metric-total"
+                            class="text-2xl font-bold text-slate-900 mt-1"
+                    >
+                        0
+                    </p>
+
+                </div>
+
+                <div class="p-3 bg-brand-50 text-brand-500 rounded-lg">
+                    <i class="fa-solid fa-database fa-lg"></i>
+                </div>
+
+            </div>
+
+
+            <!-- Active Modules -->
+            <div
+                    class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center"
+            >
+
+                <div>
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        Active Modules
+                    </p>
+
+                    <p class="text-2xl font-bold text-emerald-600 mt-1">
+                        3 Modules
+                    </p>
+
+                </div>
+
+                <div class="p-3 bg-emerald-50 text-emerald-600 rounded-lg">
+                    <i class="fa-solid fa-network-wired fa-lg"></i>
+                </div>
+
+            </div>
+
+
+            <!-- API -->
+            <div
+                    class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center"
+            >
+
+                <div>
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        API
+                    </p>
+
+                    <p
+                            id="api-status"
+                            class="text-2xl font-bold text-yellow-500 mt-1"
+                    >
+                        Checking
+                    </p>
+
+                </div>
+
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
+                    <i class="fa-solid fa-server fa-lg"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CONTENT CARD -->
+        <!-- ================================================= -->
+
+        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+
+
+            <!-- ================================================= -->
+            <!-- PATIENTS -->
+            <!-- ================================================= -->
+
+            <div id="view-patients" class="tab-view">
+
+                <table class="w-full text-left text-sm text-slate-600">
+
+                    <thead
+                            class="bg-slate-100 text-slate-700 font-semibold uppercase text-xs"
+                    >
+
+                    <tr>
+
+                        <th class="p-4">Patient ID</th>
+
+                        <th class="p-4">Full Name</th>
+
+                        <th class="p-4">DOB</th>
+
+                        <th class="p-4">Gender</th>
+
+                        <th class="p-4">Blood Group</th>
+
+                        <th class="p-4">Contact</th>
+
+                        <th class="p-4">Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody
+                            id="table-patients"
+                            class="divide-y divide-slate-100"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- DOCTORS -->
+            <!-- ================================================= -->
+
+            <div
+                    id="view-doctors"
+                    class="tab-view hidden"
+            >
+
+                <table class="w-full text-left text-sm text-slate-600">
+
+                    <thead
+                            class="bg-slate-100 text-slate-700 font-semibold uppercase text-xs"
+                    >
+
+                    <tr>
+
+                        <th class="p-4">Doctor ID</th>
+
+                        <th class="p-4">Doctor Name</th>
+
+                        <th class="p-4">Specialization</th>
+
+                        <th class="p-4">Qualification</th>
+
+                        <th class="p-4">Contact</th>
+
+                        <th class="p-4">Fee</th>
+
+                        <th class="p-4">Department</th>
+
+                        <th class="p-4">Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody
+                            id="table-doctors"
+                            class="divide-y divide-slate-100"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- DEPARTMENTS -->
+            <!-- ================================================= -->
+
+            <div
+                    id="view-departments"
+                    class="tab-view hidden"
+            >
+
+                <table class="w-full text-left text-sm text-slate-600">
+
+                    <thead
+                            class="bg-slate-100 text-slate-700 font-semibold uppercase text-xs"
+                    >
+
+                    <tr>
+
+                        <th class="p-4">Department ID</th>
+
+                        <th class="p-4">Department Name</th>
+
+                        <th class="p-4">Location</th>
+
+                        <th class="p-4">Head Doctor</th>
+
+                        <th class="p-4">Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody
+                            id="table-departments"
+                            class="divide-y divide-slate-100"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- MODAL -->
+<!-- ========================================================= -->
+
+<div
+        id="modal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex justify-center items-center z-50"
+>
+
+    <div class="bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden">
+
+        <!-- Modal Header -->
+        <div
+                class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50"
+        >
+
+            <h3
+                    id="modal-title"
+                    class="font-bold text-slate-800"
+            >
+                Register Patient
+            </h3>
+
+            <button
+                    onclick="closeModal()"
+                    class="text-slate-400 hover:text-slate-600"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PATIENT FORM -->
+        <!-- ================================================= -->
+
+        <form
+                id="patient-form"
+                onsubmit="submitPatient(event)"
+                class="p-6 grid grid-cols-2 gap-4"
+        >
+
+            <div>
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Patient ID
+                </label>
+
+                <input
+                        type="text"
+                        id="patientId"
+                        required
+                        placeholder="P16"
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Full Name
+                </label>
+
+                <input
+                        type="text"
+                        id="fullName"
+                        required
+                        placeholder="Patient Name"
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Date of Birth
+                </label>
+
+                <input
+                        type="date"
+                        id="dob"
+                        required
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Gender
+                </label>
+
+                <select
+                        id="gender"
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+                    <option value="Male">Male</option>
+
+                    <option value="Female">Female</option>
+
+                    <option value="Other">Other</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="col-span-2">
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Address
+                </label>
+
+                <input
+                        type="text"
+                        id="address"
+                        required
+                        placeholder="Address"
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Contact Number
+                </label>
+
+                <input
+                        type="text"
+                        id="contactNumber"
+                        required
+                        placeholder="0771234567"
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Blood Group
+                </label>
+
+                <select
+                        id="bloodGroup"
+                        required
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="col-span-2">
+
+                <label class="block text-xs font-semibold text-slate-600 mb-1">
+                    Emergency Contact
+                </label>
+
+                <input
+                        type="text"
+                        id="emergencyContact"
+                        required
+                        placeholder="0770000000"
+                        class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+                >
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="col-span-2 flex justify-end gap-3 mt-4">
+
+                <button
+                        type="button"
+                        onclick="closeModal()"
+                        class="px-4 py-2 border rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                >
+                    Cancel
+                </button>
+
+                <button
+                        type="submit"
+                        class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-sm font-semibold shadow-sm"
+                >
+                    Save Patient
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- TOAST -->
+<!-- ========================================================= -->
+
+<div
+        id="toast-container"
+        class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"
+></div>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
+    // =========================================================
+    // API CONFIGURATION
+    // =========================================================
+
+    const API_BASE = "http://localhost:8080/api";
+
+    const API_ENDPOINTS = {
+
+        patients: `${API_BASE}/patients`,
+
+        doctors: `${API_BASE}/doctors`,
+
+        departments: `${API_BASE}/departments`
+
+    };
+
+    let currentTab = "patients";
+
+
+    // =========================================================
+    // SWITCH TAB
+    // =========================================================
+
+    function switchTab(tab) {
+
+        currentTab = tab;
+
+        // Hide all views
+
+        document.querySelectorAll(".tab-view").forEach(view => {
+
+            view.classList.add("hidden");
+
+        });
+
+
+        // Reset navigation buttons
+
+        document.querySelectorAll(".nav-btn").forEach(button => {
+
+            button.className =
+                "nav-btn flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 text-slate-400 hover:text-white w-full";
+
+        });
+
+
+        // Show selected view
+
+        document
+            .getElementById(`view-${tab}`)
+            .classList.remove("hidden");
+
+
+        // Highlight navigation
+
+        document
+            .getElementById(`nav-${tab}`)
+            .className =
+            "nav-btn flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-brand-600 text-white w-full";
+
+
+        // Page title
+
+        document.getElementById("page-title").innerText =
+            tab.charAt(0).toUpperCase() +
+            tab.slice(1) +
+            " Module";
+
+
+        // Load data
+
+        loadData();
+
+    }
+
+
+    // =========================================================
+    // LOAD DATA
+    // =========================================================
+
+    async function loadData() {
+
+        try {
+
+            const endpoint = API_ENDPOINTS[currentTab];
+
+            if (!endpoint) {
+
+                throw new Error(
+                    "API endpoint not found"
+                );
+
+            }
+
+
+            const response = await fetch(endpoint);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP Error ${response.status}`
+                );
+
+            }
+
+
+            const data = await response.json();
+
+
+            console.log(
+                `${currentTab} data:`,
+                data
+            );
+
+
+            // Backend connected
+
+            setBackendStatus(true);
+
+
+            // Update metric
+
+            document.getElementById(
+                "metric-total"
+            ).innerText =
+                Array.isArray(data)
+                    ? data.length
+                    : 0;
+
+
+            // Render
+
+            renderTable(data);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                `${currentTab} API error:`,
+                error
+            );
+
+
+            setBackendStatus(false);
+
+
+            showToast(
+                `Failed to load ${currentTab}: ${error.message}`,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =========================================================
+    // RENDER TABLE
+    // =========================================================
+
+    function renderTable(data) {
+
+        const container =
+            document.getElementById(
+                `table-${currentTab}`
+            );
+
+
+        if (!container) {
+
+            return;
+
+        }
+
+
+        if (!data || data.length === 0) {
+
+            container.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="10"
+                        class="p-8 text-center text-slate-400"
+                    >
+
+                        No records found.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        // =====================================================
+        // PATIENTS
+        // =====================================================
+
+        if (currentTab === "patients") {
+
+            container.innerHTML = data.map(patient => `
+
+                <tr class="hover:bg-slate-50">
+
+                    <td class="p-4 font-mono">
+                        ${patient.patientId || "-"}
+                    </td>
+
+                    <td class="p-4 font-semibold text-slate-800">
+                        ${patient.fullName || "-"}
+                    </td>
+
+                    <td class="p-4">
+                        ${patient.dob || "-"}
+                    </td>
+
+                    <td class="p-4">
+                        ${patient.gender || "-"}
+                    </td>
+
+                    <td class="p-4">
+
+                        <span
+                            class="px-2 py-1 bg-rose-50 text-rose-600 rounded text-xs font-bold"
+                        >
+                            ${patient.bloodGroup ||
+            patient.blood_group ||
+            "-"}
+                        </span>
+
+                    </td>
+
+                    <td class="p-4">
+                        ${patient.contactNumber || "-"}
+                    </td>
+
+                    <td class="p-4">
+
+                        <button
+                            onclick="deletePatient('${patient.patientId}')"
+                            class="text-rose-500 hover:text-rose-700"
+                        >
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `).join("");
+
+        }
+
+
+            // =====================================================
+            // DOCTORS
+        // =====================================================
+
+        else if (currentTab === "doctors") {
+
+            container.innerHTML = data.map(doctor => `
+
+                <tr class="hover:bg-slate-50">
+
+                    <td class="p-4 font-mono">
+                        ${doctor.doctorId || "-"}
+                    </td>
+
+                    <td class="p-4 font-semibold text-slate-800">
+                        ${doctor.doctorName || "-"}
+                    </td>
+
+                    <td class="p-4">
+                        ${doctor.specialization || "-"}
+                    </td>
+
+                    <td class="p-4">
+                        ${doctor.qualification || "-"}
+                    </td>
+
+                    <td class="p-4">
+                        ${doctor.contactNumber || "-"}
+                    </td>
+
+                    <td class="p-4">
+                        Rs. ${doctor.consultationFee || "0.00"}
+                    </td>
+
+                    <td class="p-4">
+                        ${doctor.departmentId || "-"}
+                    </td>
+
+                    <td class="p-4">
+
+                        <button
+                            onclick="deleteDoctor('${doctor.doctorId}')"
+                            class="text-rose-500 hover:text-rose-700"
+                        >
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `).join("");
+
+        }
+
+
+            // =====================================================
+            // DEPARTMENTS
+        // =====================================================
+
+        else if (currentTab === "departments") {
+
+            container.innerHTML = data.map(department => `
+
+                <tr class="hover:bg-slate-50">
+
+                    <td class="p-4 font-mono">
+                        ${department.departmentId || "-"}
+                    </td>
+
+                    <td class="p-4 font-semibold text-slate-800">
+                        ${department.departmentName || "-"}
+                    </td>
+
+                    <td class="p-4">
+                        ${department.location || "-"}
+                    </td>
+
+                    <td class="p-4">
+
+                        ${
+                department.headDoctorId ||
+                department.headDoctor ||
+                "-"
+            }
+
+                    </td>
+
+                    <td class="p-4">
+
+                        <button
+                            onclick="deleteDepartment('${department.departmentId}')"
+                            class="text-rose-500 hover:text-rose-700"
+                        >
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `).join("");
+
+        }
+
+    }
+
+
+    // =========================================================
+    // PATIENT POST
+    // =========================================================
+
+    async function submitPatient(event) {
+
+        event.preventDefault();
+
+
+        const payload = {
+
+            patientId:
+            document.getElementById(
+                "patientId"
+            ).value,
+
+            fullName:
+            document.getElementById(
+                "fullName"
+            ).value,
+
+            dob:
+            document.getElementById(
+                "dob"
+            ).value,
+
+            gender:
+            document.getElementById(
+                "gender"
+            ).value,
+
+            address:
+            document.getElementById(
+                "address"
+            ).value,
+
+            contactNumber:
+            document.getElementById(
+                "contactNumber"
+            ).value,
+
+            blood_group:
+            document.getElementById(
+                "bloodGroup"
+            ).value,
+
+            emergencyContact:
+            document.getElementById(
+                "emergencyContact"
+            ).value
+
+        };
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_ENDPOINTS.patients,
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                payload
+                            )
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                throw new Error(
+                    errorText ||
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            showToast(
+                "Patient created successfully!",
+                "success"
+            );
+
+
+            closeModal();
+
+
+            document
+                .getElementById("patient-form")
+                .reset();
+
+
+            loadData();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showToast(
+                `Failed to create patient: ${error.message}`,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =========================================================
+    // DELETE PATIENT
+    // =========================================================
+
+    async function deletePatient(id) {
+
+        if (
+            !confirm(
+                `Are you sure you want to delete patient ${id}?`
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_ENDPOINTS.patients}/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            showToast(
+                `Patient ${id} deleted successfully`,
+                "success"
+            );
+
+
+            loadData();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showToast(
+                `Failed to delete patient: ${error.message}`,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =========================================================
+    // DELETE DOCTOR
+    // =========================================================
+
+    async function deleteDoctor(id) {
+
+        if (
+            !confirm(
+                `Are you sure you want to delete doctor ${id}?`
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_ENDPOINTS.doctors}/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            showToast(
+                `Doctor ${id} deleted successfully`,
+                "success"
+            );
+
+
+            loadData();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showToast(
+                `Failed to delete doctor: ${error.message}`,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =========================================================
+    // DELETE DEPARTMENT
+    // =========================================================
+
+    async function deleteDepartment(id) {
+
+        if (
+            !confirm(
+                `Are you sure you want to delete department ${id}?`
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_ENDPOINTS.departments}/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            showToast(
+                `Department ${id} deleted successfully`,
+                "success"
+            );
+
+
+            loadData();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showToast(
+                `Failed to delete department: ${error.message}`,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =========================================================
+    // MODAL
+    // =========================================================
+
+    function openModal() {
+
+        if (currentTab !== "patients") {
+
+            showToast(
+                "The current form is for Patients.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        document
+            .getElementById("modal")
+            .classList
+            .remove("hidden");
+
+    }
+
+
+    function closeModal() {
+
+        document
+            .getElementById("modal")
+            .classList
+            .add("hidden");
+
+    }
+
+
+    // =========================================================
+    // BACKEND STATUS
+    // =========================================================
+
+    function setBackendStatus(connected) {
+
+        const status =
+            document.getElementById(
+                "backend-status"
+            );
+
+        const apiStatus =
+            document.getElementById(
+                "api-status"
+            );
+
+
+        if (connected) {
+
+            status.innerText =
+                "Connected";
+
+            status.className =
+                "text-emerald-400 font-mono";
+
+            apiStatus.innerText =
+                "Online";
+
+            apiStatus.className =
+                "text-2xl font-bold text-emerald-600 mt-1";
+
+        }
+
+        else {
+
+            status.innerText =
+                "Disconnected";
+
+            status.className =
+                "text-rose-400 font-mono";
+
+            apiStatus.innerText =
+                "Offline";
+
+            apiStatus.className =
+                "text-2xl font-bold text-rose-600 mt-1";
+
+        }
+
+    }
+
+
+    // =========================================================
+    // TOAST
+    // =========================================================
+
+    function showToast(message, type) {
+
+        const toast =
+            document.createElement("div");
+
+
+        toast.className =
+            `p-4 rounded-lg shadow-lg text-white text-sm font-medium
+            ${type === "success"
+                ? "bg-emerald-600"
+                : "bg-rose-600"}`;
+
+
+        toast.innerText = message;
+
+
+        document
+            .getElementById(
+                "toast-container"
+            )
+            .appendChild(toast);
+
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        }, 4000);
+
+    }
+
+
+    // =========================================================
+    // INITIAL LOAD
+    // =========================================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            loadData();
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
