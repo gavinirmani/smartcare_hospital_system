@@ -1,18 +1,13 @@
 package com.smartcare.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter
 @Getter
+@Setter
 @Entity
 @Table(name = "room")
 public class Room {
@@ -21,25 +16,59 @@ public class Room {
     @Column(name = "room_id", length = 10)
     private String roomId;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
-    private RoomCategory category;
+    private String category;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "room_availability", nullable = false)
-    private RoomAvailability roomAvailability = RoomAvailability.Available;
+    private String roomAvailability;
 
     @Column(name = "charge_per_day", precision = 10, scale = 2)
-    private BigDecimal chargePerDay = BigDecimal.ZERO;
+    private BigDecimal chargePerDay;
 
     public Room() {
     }
 
-    public Room(String roomId, RoomCategory category, RoomAvailability roomAvailability, BigDecimal chargePerDay) {
+    public Room(
+            String roomId,
+            RoomCategory category,
+            RoomAvailability roomAvailability,
+            BigDecimal chargePerDay
+    ) {
         this.roomId = roomId;
-        this.category = category;
-        this.roomAvailability = roomAvailability;
+        this.category = category != null
+                ? category.getValue()
+                : null;
+        this.roomAvailability = roomAvailability != null
+                ? roomAvailability.getValue()
+                : null;
         this.chargePerDay = chargePerDay;
     }
 
+    public RoomCategory getCategory() {
+        if (category == null) {
+            return null;
+        }
+
+        return RoomCategory.fromValue(category);
+    }
+
+    public void setCategory(RoomCategory category) {
+        this.category = category != null
+                ? category.getValue()
+                : null;
+    }
+
+    public RoomAvailability getRoomAvailability() {
+        if (roomAvailability == null) {
+            return null;
+        }
+
+        return RoomAvailability.fromValue(roomAvailability);
+    }
+
+    public void setRoomAvailability(RoomAvailability roomAvailability) {
+        this.roomAvailability = roomAvailability != null
+                ? roomAvailability.getValue()
+                : null;
+    }
 }

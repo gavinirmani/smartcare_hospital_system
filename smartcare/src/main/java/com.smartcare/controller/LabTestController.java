@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lab-tests")
+@CrossOrigin(origins = "*")
 public class LabTestController {
 
     private final LabTestService labTestService;
@@ -19,43 +22,100 @@ public class LabTestController {
         this.labTestService = labTestService;
     }
 
+    // =========================
+    // CREATE LAB TEST
+    // =========================
     @PostMapping
-    public ResponseEntity<LabTestResponseDto> createLabTest(@RequestBody LabTestRequestDto requestDto) {
-        LabTestResponseDto created = labTestService.createLabTest(requestDto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<LabTestResponseDto> createLabTest(
+            @RequestBody LabTestRequestDto requestDto) {
+
+        LabTestResponseDto response =
+                labTestService.createLabTest(requestDto);
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.CREATED
+        );
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<LabTestResponseDto> getLabTestById(@PathVariable("id") String labTestId) {
-        return ResponseEntity.ok(labTestService.getLabTestById(labTestId));
-    }
-
+    // =========================
+    // GET ALL LAB TESTS
+    // =========================
     @GetMapping
     public ResponseEntity<List<LabTestResponseDto>> getAllLabTests() {
-        return ResponseEntity.ok(labTestService.getAllLabTests());
+
+        return ResponseEntity.ok(
+                labTestService.getAllLabTests()
+        );
     }
 
+    // =========================
+    // UPDATE LAB TEST
+    // =========================
+    @PutMapping("/{labTestId}")
+    public ResponseEntity<LabTestResponseDto> updateLabTest(
+            @PathVariable String labTestId,
+            @RequestBody LabTestRequestDto requestDto) {
+
+        return ResponseEntity.ok(
+                labTestService.updateLabTest(
+                        labTestId,
+                        requestDto
+                )
+        );
+    }
+
+    // =========================
+    // GET LAB TEST BY ID
+    // =========================
+    @GetMapping("/{labTestId}")
+    public ResponseEntity<LabTestResponseDto> getLabTestById(
+            @PathVariable String labTestId) {
+
+        return ResponseEntity.ok(
+                labTestService.getLabTestById(labTestId)
+        );
+    }
+
+    // =========================
+    // GET LAB TESTS BY PATIENT
+    // =========================
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<LabTestResponseDto>> getLabTestsByPatient(@PathVariable("patientId") String patientId) {
-        return ResponseEntity.ok(labTestService.getLabTestsByPatient(patientId));
+    public ResponseEntity<List<LabTestResponseDto>> getByPatient(
+            @PathVariable String patientId) {
+
+        return ResponseEntity.ok(
+                labTestService.getLabTestsByPatient(patientId)
+        );
     }
 
+    // =========================
+    // GET LAB TESTS BY DOCTOR
+    // =========================
     @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<List<LabTestResponseDto>> getLabTestsByDoctor(@PathVariable("doctorId") String doctorId) {
-        return ResponseEntity.ok(labTestService.getLabTestsByDoctor(doctorId));
+    public ResponseEntity<List<LabTestResponseDto>> getByDoctor(
+            @PathVariable String doctorId) {
+
+        return ResponseEntity.ok(
+                labTestService.getLabTestsByDoctor(doctorId)
+        );
     }
 
-    @PatchMapping("/{id}/result")
-    public ResponseEntity<LabTestResponseDto> updateResult(
-            @PathVariable("id") String labTestId,
-            @RequestParam("result") String result,
-            @RequestParam("technicianName") String technicianName) {
-        return ResponseEntity.ok(labTestService.updateLabTestResult(labTestId, result, technicianName));
-    }
+    // =========================
+    // DELETE LAB TEST
+    // =========================
+    @DeleteMapping("/{labTestId}")
+    public ResponseEntity<Map<String, String>> deleteLabTest(
+            @PathVariable String labTestId) {
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLabTest(@PathVariable("id") String labTestId) {
         labTestService.deleteLabTest(labTestId);
-        return ResponseEntity.noContent().build();
+
+        Map<String, String> response = new HashMap<>();
+        response.put(
+                "message",
+                "Lab test " + labTestId + " deleted successfully"
+        );
+
+        return ResponseEntity.ok(response);
     }
 }

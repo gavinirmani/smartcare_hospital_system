@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/treatments")
+@RequestMapping("/api/treatment-records")
 public class TreatmentRecordController {
 
     private final TreatmentRecordService treatmentRecordService;
@@ -53,8 +55,17 @@ public class TreatmentRecordController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTreatmentRecord(@PathVariable("id") String treatmentId) {
+    public ResponseEntity<Map<String, String>> deleteTreatmentRecord(
+            @PathVariable("id") String treatmentId) {
+
         treatmentRecordService.deleteTreatmentRecord(treatmentId);
-        return ResponseEntity.noContent().build();
+
+        Map<String, String> response = new HashMap<>();
+        response.put(
+                "message",
+                "Treatment record " + treatmentId + " deleted successfully"
+        );
+
+        return ResponseEntity.ok(response);
     }
 }

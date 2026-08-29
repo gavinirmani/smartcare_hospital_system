@@ -10,6 +10,13 @@ import java.util.List;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, String> {
-    List<Room> findByRoomAvailability(RoomAvailability roomAvailability);
+
     List<Room> findByCategory(RoomCategory category);
+
+    List<Room> findByRoomAvailability(RoomAvailability roomAvailability);
+
+    List<Room> findByCategoryAndRoomAvailability(
+            RoomCategory category,
+            RoomAvailability roomAvailability
+    );
 }

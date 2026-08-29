@@ -1,29 +1,31 @@
 package com.smartcare.dto;
 
-import com.smartcare.entity.RoomAvailability;
-import com.smartcare.entity.RoomCategory;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter
 @Getter
+@Setter
 public class RoomResponseDto {
 
     private String roomId;
-    private RoomCategory category;
-    private RoomAvailability roomAvailability;
+    private String category;
+    private String roomAvailability;
     private BigDecimal chargePerDay;
 
     public RoomResponseDto() {
     }
 
-    public RoomResponseDto(String roomId, RoomCategory category, RoomAvailability roomAvailability, BigDecimal chargePerDay) {
+    public RoomResponseDto(
+            String roomId,
+            String category,
+            String roomAvailability,
+            BigDecimal chargePerDay
+    ) {
         this.roomId = roomId;
         this.category = category;
         this.roomAvailability = roomAvailability;
         this.chargePerDay = chargePerDay;
     }
-
 }

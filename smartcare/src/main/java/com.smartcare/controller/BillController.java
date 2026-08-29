@@ -2,17 +2,17 @@ package com.smartcare.controller;
 
 import com.smartcare.dto.BillRequestDto;
 import com.smartcare.dto.BillResponseDto;
-import com.smartcare.entity.PaymentMethod;
-import com.smartcare.entity.PaymentStatus;
 import com.smartcare.service.billing.BillService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/bills")
+@RequestMapping("/api/billing")
+@CrossOrigin(origins = "*")
 public class BillController {
 
     private final BillService billService;
@@ -22,47 +22,66 @@ public class BillController {
     }
 
     @PostMapping
-    public ResponseEntity<BillResponseDto> createBill(@RequestBody BillRequestDto requestDto) {
-        BillResponseDto created = billService.createBill(requestDto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
-    }
+    public ResponseEntity<BillResponseDto> createBill(
+            @RequestBody BillRequestDto requestDto) {
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BillResponseDto> getBillById(@PathVariable("id") String billId) {
-        return ResponseEntity.ok(billService.getBillById(billId));
+        return new ResponseEntity<>(
+                billService.createBill(requestDto),
+                HttpStatus.CREATED
+        );
     }
 
     @GetMapping
     public ResponseEntity<List<BillResponseDto>> getAllBills() {
-        return ResponseEntity.ok(billService.getAllBills());
+        return ResponseEntity.ok(
+                billService.getAllBills()
+        );
+    }
+
+    @GetMapping("/{billId}")
+    public ResponseEntity<BillResponseDto> getBillById(
+            @PathVariable String billId) {
+
+        return ResponseEntity.ok(
+                billService.getBillById(billId)
+        );
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<BillResponseDto>> getBillsByPatient(@PathVariable("patientId") String patientId) {
-        return ResponseEntity.ok(billService.getBillsByPatient(patientId));
+    public ResponseEntity<List<BillResponseDto>> getBillsByPatient(
+            @PathVariable String patientId) {
+
+        return ResponseEntity.ok(
+                billService.getBillsByPatient(patientId)
+        );
     }
 
-    @GetMapping("/appointment/{appointmentId}")
-    public ResponseEntity<List<BillResponseDto>> getBillsByAppointment(@PathVariable("appointmentId") String appointmentId) {
-        return ResponseEntity.ok(billService.getBillsByAppointment(appointmentId));
+
+    @PutMapping("/{billId}")
+    public ResponseEntity<BillResponseDto> updateBill(
+            @PathVariable String billId,
+            @RequestBody BillRequestDto requestDto) {
+
+        return ResponseEntity.ok(
+                billService.updateBill(
+                        billId,
+                        requestDto
+                )
+        );
+
     }
 
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<BillResponseDto>> getBillsByPaymentStatus(@PathVariable("status") PaymentStatus status) {
-        return ResponseEntity.ok(billService.getBillsByPaymentStatus(status));
-    }
+    @DeleteMapping("/{billId}")
+    public ResponseEntity<Map<String, String>> deleteBill(
+            @PathVariable String billId) {
 
-    @PatchMapping("/{id}/payment")
-    public ResponseEntity<BillResponseDto> updatePaymentStatus(
-            @PathVariable("id") String billId,
-            @RequestParam("status") PaymentStatus status,
-            @RequestParam(value = "method", required = false) PaymentMethod method) {
-        return ResponseEntity.ok(billService.updatePaymentStatus(billId, status, method));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBill(@PathVariable("id") String billId) {
         billService.deleteBill(billId);
-        return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "message",
+                        "Bill " + billId + " deleted successfully"
+                )
+        );
     }
 }

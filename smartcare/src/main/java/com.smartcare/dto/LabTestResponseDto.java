@@ -8,13 +8,12 @@ import java.time.LocalDate;
 public record LabTestResponseDto(
         String labTestId,
         String patientId,
-        String patientName,
         String doctorId,
-        String doctorName,
         String testName,
         LocalDate testDate,
         String testResult,
         String technicianName,
         LabTestStatus labTestStatus,
         BigDecimal testCharge
-) {}
+) {
+}
