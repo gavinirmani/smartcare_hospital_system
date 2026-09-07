@@ -1,0 +1,1389 @@
+{
+  "info": {
+    "_postman_id": "99647333-7b49-49bb-b297-038b816aef92",
+    "name": "SmartCare Hospital System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56890417",
+    "_collection_link": "https://go.postman.co/collection/56890417-99647333-7b49-49bb-b297-038b816aef92?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Patient Management",
+      "item": [
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\r\n  \"patientId\": \"P16\",\r\n  \"fullName\": \"Nimasha sandamali\",\r\n  \"dob\": \"2002-03-15\",\r\n  \"gender\": \"Female\",\r\n  \"address\": \"Galle\",\r\n  \"contactNumber\": \"0770000016\",\r\n  \"bloodGroup\": \"O+\",\r\n  \"emergencyContact\": \"0777654321\"\r\n  \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/patients/P16",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "patients",
+                "P16"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Patient",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"patientId\": \"P1\",\r\n  \"fullName\": \"Kusal Mendis\",\r\n  \"dob\": \"1995-02-16\",\r\n  \"gender\": \"Male\",\r\n  \"address\": \"Colombo\",\r\n  \"contactNumber\": \"0771112223\",\r\n  \"bloodGroup\": \"A+\",\r\n  \"emergencyContact\": \"0770000001\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/patients/P1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "patients",
+                "P1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"patientId\": \"P1\",\r\n  \"fullName\": \"Kusal Mendis\",\r\n  \"dob\": \"1995-02-16\",\r\n  \"gender\": \"Male\",\r\n  \"address\": \"Kandy\",\r\n  \"contactNumber\": \"0771112223\",\r\n  \"bloodGroup\": \"B-\",\r\n  \"emergencyContact\": \"0770000099\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/patients/P1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "patients",
+                "P1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"patientId\": \"P16\",\r\n  \"fullName\": \"Nimasha Supun\",\r\n  \"dob\": \"2004-02-19\",\r\n  \"gender\": \"Male\",\r\n  \"address\": \"Kandy\",\r\n  \"contactNumber\": \"0771234567\",\r\n  \"bloodGroup\": \"O+\",\r\n  \"emergencyContact\": \"0779876543\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/patients/P16",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "patients",
+                "P16"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Doctor Management",
+      "item": [
+        {
+          "name": "Create Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\r\n\"doctorId\":\"DO6\",\r\n\"doctorName\":\"Dr.Sunil Perera\",\r\n\"specialization\":\"Neurologist\",\r\n\"qualification\":\"MBBS, MD\",\r\n\"contactNumber\":\"0715865655\",\r\n\"consultationFee\":3500,\r\n\"departmentId\":\"DE6\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/doctors",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "doctors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Doctor",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"doctorId\": \"DO1\",\r\n  \"doctorName\": \"Dr. Nimal Perera\",\r\n  \"specialization\": \"Cardiologist\",\r\n  \"qualification\": \"MBBS, MD\",\r\n  \"contactNumber\": \"0771234567\",\r\n  \"consultationFee\": 3500.00,\r\n  \"departmentId\": \"DE1\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/doctors/DO1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "doctors",
+                "DO1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Doctor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"doctorId\": \"DO4\",\r\n  \"doctorName\": \"Dr.Anura Jayasinghe\",\r\n  \"specialization\": \"Radiologist\",\r\n  \"qualification\": \"MBBS, MS\",\r\n  \"contactNumber\": \"0784567890\",\r\n  \"consultationFee\": 3000.00,\r\n  \"departmentId\": \"DE5\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/doctors/DO4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "doctors",
+                "DO4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Doctor",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"doctorId\": \"DO6\",\r\n  \"doctorName\": \"Dr.Sunil Perera\",\r\n  \"specialization\": \"Cardiologist\",\r\n  \"qualification\": \"MBBS, MD\",\r\n  \"contactNumber\": \"0715865655\",\r\n  \"consultationFee\": 3500.00,\r\n  \"departmentId\": \"DE1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/doctors/DO6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "doctors",
+                "DO6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Department Management",
+      "item": [
+        {
+          "name": "Create Department",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"departmentId\": \"DE6\",\r\n  \"departmentName\": \"Neurology\",\r\n  \"location\": \"Block A - Floor 2\",\r\n  \"headDoctor\": \"DO6\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/departments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "departments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Department",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"departmentId\": \"DE3\",\r\n  \"departmentName\": \"Orthopedics\",\r\n  \"location\": \"Block C, Level 1\",\r\n  \"headDoctorId\": \"DO4\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/departments/DE3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "departments",
+                "DE3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"departmentId\": \"DE2\",\r\n    \"departmentName\": \"Cardiology\",\r\n    \"location\": \"Block B - Level 2\",\r\n    \"headDoctor\": \"DO2\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/departments/DE2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "departments",
+                "DE2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Department",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"departmentId\": \"DE6\",\r\n  \"departmentName\": \"Neurology\",\r\n  \"location\": \"Block A, Floor 2\",\r\n  \"headDoctorId\": \"DO6\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/departments/DE6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "departments",
+                "DE6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointment Management",
+      "item": [
+        {
+          "name": "Create Appointment",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/appointments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "appointments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Appointment",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"appointmentId\": \"A2\",\r\n  \"patientId\": \"P2\",\r\n  \"doctorId\": \"DO2\",\r\n  \"appointmentDate\": \"2026-07-10\",\r\n  \"appointmentTime\": \"09:30:00\",\r\n  \"consultationRoom\": \"CR-101\",\r\n  \"appointmentStatus\": \"Canceled\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/appointments/A2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "appointments",
+                "A2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Appointment",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"appointmentId\": \"A3\",\r\n  \"patientId\": \"P3\",\r\n  \"doctorId\": \"DO4\",\r\n  \"appointmentDate\": \"2026-07-10\",\r\n  \"appointmentTime\": \"10:30:00\",\r\n  \"consultationRoom\": \"CR-102\",\r\n  \"appointmentStatus\": \"Scheduled\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/appointments/A3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "appointments",
+                "A3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Appointment",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"appointmentId\": \"A4\",\r\n  \"patientId\": \"P4\",\r\n  \"doctorId\": \"DO3\",\r\n  \"appointmentDate\": \"2026-07-11\",\r\n  \"appointmentTime\": \"08:00:00\",\r\n  \"consultationRoom\": \"CR-103\",\r\n  \"appointmentStatus\": \"Scheduled\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/appointments/A4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "appointments",
+                "A4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Room Management",
+      "item": [
+        {
+          "name": "Create Room",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"roomId\": \"GW-202\",\r\n  \"category\": \"General Ward\",\r\n  \"roomAvailability\": \"Occupied\",\r\n  \"chargePerDay\": 3000.00\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rooms",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rooms"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Room",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n  {\r\n    \"roomId\": \"GW-201\",\r\n    \"category\": \"GENERAL_WARD\",\r\n    \"roomAvailability\": \"Available\",\r\n    \"chargePerDay\": 3000.00\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rooms/GW-201",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rooms",
+                "GW-201"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"roomId\": \"ICU-01\",\r\n  \"category\": \"ICU\",\r\n  \"roomAvailability\": \"Available\",\r\n  \"chargePerDay\": 7000.00\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rooms/ICU-01",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rooms",
+                "ICU-01"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Room",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"roomId\": \"GW-202\",\r\n  \"category\": \"General Ward\",\r\n  \"roomAvailability\": \"Occupied\",\r\n  \"chargePerDay\": 3000.00\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rooms/GW-202",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rooms",
+                "GW-202"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admission Management",
+      "item": [
+        {
+          "name": "Create Admission",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"admissionId\": \"ADM6\",\r\n  \"patientId\": \"P8\",\r\n  \"roomId\": \"PR-102\",\r\n  \"admissionDate\": \"2026-08-26\",\r\n  \"bedNo\": \"Bed-3\",\r\n  \"admissionStatus\": \"Admitted\",\r\n  \"dischargeDate\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admissions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admissions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Admission",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"admissionId\": \"ADM1\",\r\n  \"patientId\": \"P15\",\r\n  \"roomId\": \"PR-101\",\r\n  \"admissionDate\": \"2026-07-20\",\r\n  \"bedNo\": \"Bed-1\",\r\n  \"admissionStatus\": \"Admitted\",\r\n  \"dischargeDate\": null\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admissions/ADM1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admissions",
+                "ADM1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Admission",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"admissionId\": \"ADM2\",\r\n  \"patientId\": \"P8\",\r\n  \"roomId\": \"GW-201\",\r\n  \"admissionDate\": \"2026-07-17\",\r\n  \"bedNo\": \"Bed-B\",\r\n  \"admissionStatus\": \"Admitted\",\r\n  \"dischargeDate\": null\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admissions/ADM2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admissions",
+                "ADM2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Admission",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"admissionId\": \"ADM6\",\r\n  \"patientId\": \"P8\",\r\n  \"roomId\": \"PR-102\",\r\n  \"admissionDate\": \"2026-08-26\",\r\n  \"bedNo\": \"Bed-3\",\r\n  \"admissionStatus\": \"Admitted\",\r\n  \"dischargeDate\": null\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admissions/ADM6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admissions",
+                "ADM6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "LabTest Management",
+      "item": [
+        {
+          "name": "Create LabTest",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/lab-tests",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "lab-tests"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read LabTest",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"labTestId\": \"L2\",\r\n    \"patientId\": \"P3\",\r\n    \"doctorId\": \"DO4\",\r\n    \"testName\": \"ESR & Full Blood Count\",\r\n    \"testDate\": \"2026-07-12\",\r\n    \"testResult\": \"Inflammatory Markers Normal\",\r\n    \"technicianName\": \"Ruwan Silva\",\r\n    \"labTestStatus\": \"Completed\",\r\n    \"testCharge\": 2000.00\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/lab-tests/L2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "lab-tests",
+                "L2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update LabTest",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"labTestId\": \"L3\",\r\n    \"patientId\": \"P14\",\r\n    \"doctorId\": \"DO5\",\r\n    \"testName\": \"X-Ray Chest\",\r\n    \"testDate\": \"2026-07-16\",\r\n    \"testResult\": \"Clear\",\r\n    \"technicianName\": \"Nalaka Fernando\",\r\n    \"labTestStatus\": \"Completed\",\r\n    \"testCharge\": 2500.00\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/lab-tests/L3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "lab-tests",
+                "L3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete LabTest",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/lab-tests/L4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "lab-tests",
+                "L4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "TreatmentRecord Management",
+      "item": [
+        {
+          "name": "Create TreatmentRecord",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"treatmentId\": \"T6\",\r\n    \"patientId\": \"P3\",\r\n    \"doctorId\": \"DO4\",\r\n    \"treatmentDate\": \"2026-08-29\",\r\n    \"diagnosis\": \"Wrist Pain Follow-up\",\r\n    \"prescriptionDetails\": \"Continue prescribed medication\",\r\n    \"treatmentNotes\": \"Patient advised to attend follow-up appointment.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/treatment-records",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "treatment-records"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read TreatmentRecord",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"treatmentId\": \"T6\",\r\n    \"patientId\": \"P3\",\r\n    \"doctorId\": \"DO4\",\r\n    \"treatmentDate\": \"2026-08-29\",\r\n    \"diagnosis\": \"Wrist Pain Follow-up\",\r\n    \"prescriptionDetails\": \"Continue prescribed medication\",\r\n    \"treatmentNotes\": \"Patient advised to attend follow-up appointment.\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/treatment-records/T2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "treatment-records",
+                "T2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update TreatmentRecord",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"treatmentId\": \"T4\",\r\n    \"patientId\": \"P5\",\r\n    \"doctorId\": \"DO5\",\r\n    \"diagnosis\": \"Chest Radiograph Findings\",\r\n    \"prescriptionDetails\": \"N/A - Imaging Diagnostic\",\r\n    \"treatmentNotes\": \"X-Ray confirmed minor pulmonary congestion; report forwarded to attending physician\",\r\n    \"treatmentDate\": \"2026-07-21\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/treatment-records/T4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "treatment-records",
+                "T4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete TreatmentRecord",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"treatmentId\": \"T6\",\r\n    \"patientId\": \"P3\",\r\n    \"doctorId\": \"DO4\",\r\n    \"treatmentDate\": \"2026-08-29\",\r\n    \"diagnosis\": \"Wrist Pain Follow-up\",\r\n    \"prescriptionDetails\": \"Continue prescribed medication\",\r\n    \"treatmentNotes\": \"Patient advised to attend follow-up appointment.\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/treatment-records/T6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "treatment-records",
+                "T6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Billing Management",
+      "item": [
+        {
+          "name": "Create Billing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"billId\": \"B13\",\r\n    \"patientId\": \"P3\",\r\n    \"appointmentId\": \"A3\",\r\n    \"billDate\": \"2026-08-29\",\r\n    \"consultationCharges\": 4000.00,\r\n    \"roomCharges\": 0.00,\r\n    \"labCharges\": 1500.00,\r\n    \"medicineCharges\": 2000.00,\r\n    \"totalAmount\": 7500.00,\r\n    \"paymentStatus\": \"Pending\",\r\n    \"paymentMethod\": null\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/billing",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "billing"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Billing",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"billId\": \"B6\",\r\n    \"patientId\": \"P7\",\r\n    \"appointmentId\": \"A7\",\r\n    \"billDate\": \"2026-07-13\",\r\n    \"consultationCharges\": 3000.00,\r\n    \"roomCharges\": 0.00,\r\n    \"labCharges\": 0.00,\r\n    \"medicineCharges\": 800.00,\r\n    \"totalAmount\": 3800.00,\r\n    \"paymentStatus\": \"Paid\",\r\n    \"paymentMethod\": \"Cash\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/billing/B6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "billing",
+                "B6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Billing",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"billId\": \"B10\",\r\n    \"patientId\": \"P14\",\r\n    \"appointmentId\": \"A15\",\r\n    \"billDate\": \"2026-07-16\",\r\n    \"consultationCharges\": 3000.00,\r\n    \"roomCharges\": 0.00,\r\n    \"labCharges\": 2500.00,\r\n    \"medicineCharges\": 1500.00,\r\n    \"totalAmount\": 7500.00,\r\n    \"paymentStatus\": \"Paid\",\r\n    \"paymentMethod\": \"Online\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/billing/B10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "billing",
+                "B10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Billing",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"billId\": \"B13\",\r\n    \"patientId\": \"P3\",\r\n    \"appointmentId\": \"A3\",\r\n    \"billDate\": \"2026-08-29\",\r\n    \"consultationCharges\": 4000.00,\r\n    \"roomCharges\": 0.00,\r\n    \"labCharges\": 1500.00,\r\n    \"medicineCharges\": 2000.00,\r\n    \"totalAmount\": 7500.00,\r\n    \"paymentStatus\": \"Pending\",\r\n    \"paymentMethod\": null\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/billing/B13",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "billing",
+                "B13"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    }
+  ]
+}
