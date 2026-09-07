@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SmartCare — a calmer, smarter way to manage your health." />
+    <title>SmartCare | Hospital Operations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --ink: #14211f;
+            --muted: #71807c;
+            --line: #e6eeeb;
+            --green: #177b62;
+            --green-deep: #0f5f4b;
+            --mint: #e8f6f0;
+            --cream: #f7f9f7;
+            --card: #ffffff;
+            --coral: #e96b58;
+            --shadow: 0 18px 50px rgba(19, 66, 53, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-width: 320px;
+            color: var(--ink);
+            background: var(--cream);
+            font-family: "DM Sans", sans-serif;
+        }
+
+        button, input { font: inherit; }
+        button { cursor: pointer; }
+        a { color: inherit; text-decoration: none; }
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: 246px minmax(0, 1fr);
+            min-height: 100vh;
+            max-width: 1600px;
+            margin: auto;
+            background: var(--cream);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            padding: 30px 18px 24px;
+            background: #fff;
+            border-right: 1px solid var(--line);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px 34px;
+            font-family: "Manrope", sans-serif;
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .brand-mark {
+            position: relative;
+            display: grid;
+            width: 31px;
+            height: 31px;
+            place-items: center;
+            overflow: hidden;
+            color: white;
+            background: var(--green);
+            border-radius: 10px 10px 10px 2px;
+            box-shadow: 0 6px 14px rgba(23, 123, 98, 0.2);
+        }
+        .brand-mark::after {
+            position: absolute;
+            width: 16px;
+            height: 4px;
+            content: "";
+            background: #bcebd9;
+            border-radius: 8px;
+            transform: rotate(-45deg) translate(1px, 9px);
+        }
+        .brand-mark span { position: relative; z-index: 1; font-size: 21px; font-weight: 400; }
+
+        .menu-label {
+            padding: 0 11px;
+            margin: 0 0 10px;
+            color: #9aa5a1;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.25px;
+            text-transform: uppercase;
+        }
+
+        .nav-list { display: grid; gap: 5px; padding: 0; margin: 0; list-style: none; }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 11px;
+            color: #5f6e69;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s ease;
+        }
+        .nav-link:hover { color: var(--green); background: #f5faf8; }
+        .nav-link.active { color: var(--green-deep); background: var(--mint); font-weight: 700; }
+        .nav-icon { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.9; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        .side-support {
+            position: relative;
+            overflow: hidden;
+            padding: 16px;
+            margin-top: auto;
+            color: #e8fff6;
+            background: #166650;
+            border-radius: 15px;
+        }
+        .side-support::before, .side-support::after { position: absolute; content: ""; border: 1px solid rgba(203, 252, 232, 0.15); border-radius: 50%; }
+        .side-support::before { width: 120px; height: 120px; right: -52px; top: -45px; }
+        .side-support::after { width: 77px; height: 77px; right: -13px; top: -24px; }
+        .side-support p, .side-support strong, .side-support a { position: relative; z-index: 1; }
+        .side-support p { margin: 0 0 7px; font-size: 12px; line-height: 1.45; color: #bde6d5; }
+        .side-support strong { display: block; margin-bottom: 9px; font-size: 14px; }
+        .side-support a { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; }
+
+        main { min-width: 0; padding: 29px 4.6vw 42px; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 31px; }
+        .mobile-brand { display: none; }
+        .search { position: relative; width: min(330px, 42vw); }
+        .search svg { position: absolute; top: 50%; left: 14px; width: 17px; height: 17px; color: #7d8c87; transform: translateY(-50%); }
+        .search input { width: 100%; padding: 11px 13px 11px 40px; color: var(--ink); outline: none; background: #fff; border: 1px solid transparent; border-radius: 10px; font-size: 13px; transition: .2s; }
+        .search input::placeholder { color: #a1aca8; }
+        .search input:focus { border-color: #9ed8c5; box-shadow: 0 0 0 3px rgba(23, 123, 98, .08); }
+        .profile { display: flex; align-items: center; gap: 13px; }
+        .notification { position: relative; display: grid; width: 39px; height: 39px; place-items: center; color: #50605b; background: #fff; border: 0; border-radius: 10px; }
+        .notification svg { width: 18px; height: 18px; }
+        .notification::after { position: absolute; top: 8px; right: 9px; width: 6px; height: 6px; content: ""; background: var(--coral); border: 1.5px solid #fff; border-radius: 50%; }
+
+        .greeting { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+        .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; }
+        h1, h2, h3, p { margin-top: 0; }
+        h1 { margin-bottom: 7px; font-family: "Manrope", sans-serif; font-size: clamp(27px, 3vw, 37px); line-height: 1.18; letter-spacing: -1.65px; }
+        .subtitle { margin: 0; color: var(--muted); font-size: 14px; }
+        .date-chip { display: flex; align-items: center; gap: 8px; padding: 9px 12px; color: #61706b; background: #fff; border-radius: 9px; white-space: nowrap; font-size: 12px; font-weight: 600; }
+        .date-chip svg { width: 16px; height: 16px; color: var(--green); }
+
+        .hero-grid { display: grid; grid-template-columns: minmax(0, 1.48fr) minmax(250px, .85fr); gap: 20px; margin-bottom: 20px; }
+        .care-card { position: relative; min-height: 234px; padding: 28px 30px; overflow: hidden; color: #fff; background: linear-gradient(125deg, #0f6f57, #188168); border-radius: 19px; box-shadow: 0 13px 25px rgba(19, 114, 89, .16); }
+        .care-card::before { position: absolute; width: 270px; height: 270px; top: -155px; right: -75px; content: ""; border: 1px solid rgba(239, 255, 249, .2); border-radius: 50%; box-shadow: 0 0 0 24px rgba(239, 255, 249, .055), 0 0 0 54px rgba(239, 255, 249, .04); }
+        .care-card::after { position: absolute; width: 95px; height: 95px; right: 28px; bottom: -48px; content: ""; background: #8dd9bd; border-radius: 50%; opacity: .28; }
+        .care-content { position: relative; z-index: 1; max-width: 420px; }
+        .care-card .eyebrow { color: #b8e8d6; }
+        .care-card h2 { max-width: 350px; margin-bottom: 10px; font-family: "Manrope", sans-serif; font-size: clamp(22px, 2.2vw, 29px); line-height: 1.24; letter-spacing: -1px; }
+        .care-card p { max-width: 360px; margin-bottom: 20px; color: #ceeee1; font-size: 13px; line-height: 1.55; }
+        .button-primary, .button-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 15px; border-radius: 9px; font-size: 12px; font-weight: 700; transition: transform .18s, background .18s; }
+        .button-primary { color: var(--green-deep); background: #fff; border: 0; }
+        .button-primary:hover { background: #effbf6; transform: translateY(-1px); }
+        .button-primary svg, .button-ghost svg { width: 15px; height: 15px; }
+
+        .score-card { padding: 24px; background: #fff; border: 1px solid var(--line); border-radius: 19px; box-shadow: var(--shadow); }
+        .score-head, .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .score-head h3, .section-heading h2 { margin: 0; font-family: "Manrope", sans-serif; font-size: 16px; letter-spacing: -.5px; }
+        .score-head span { color: var(--green); font-size: 11px; font-weight: 700; }
+        .score-content { display: flex; align-items: center; gap: 19px; margin-top: 24px; }
+        .ring { position: relative; display: grid; flex: 0 0 auto; width: 102px; height: 102px; place-items: center; border-radius: 50%; background: conic-gradient(var(--green) 0 82%, #e7f1ed 82% 100%); }
+        .ring::before { width: 80px; height: 80px; content: ""; background: #fff; border-radius: 50%; }
+        .ring div { position: absolute; text-align: center; }
+        .ring strong { display: block; color: var(--green-deep); font-family: "Manrope", sans-serif; font-size: 22px; letter-spacing: -1px; }
+        .ring small { display: block; margin-top: -2px; color: #84908c; font-size: 9px; }
+        .score-copy p { margin: 0 0 5px; color: var(--ink); font-size: 13px; font-weight: 700; }
+        .score-copy span { display: block; color: var(--muted); font-size: 12px; line-height: 1.45; }
+        .score-link { display: inline-block; margin-top: 8px; color: var(--green); font-size: 11px; font-weight: 700; }
+
+        .section-heading { margin: 31px 0 15px; }
+        .section-heading > a { color: var(--green); font-size: 12px; font-weight: 700; }
+        .appointment-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 17px 20px; background: #fff; border: 1px solid var(--line); border-radius: 15px; box-shadow: 0 7px 24px rgba(31, 72, 60, .045); }
+        .calendar-tile { display: grid; width: 54px; height: 55px; place-items: center; overflow: hidden; border: 1px solid #f0d5cf; border-radius: 10px; background: #fff8f6; }
+        .calendar-tile b { align-self: stretch; width: 100%; padding-top: 4px; color: #fff; background: var(--coral); text-align: center; font-size: 9px; letter-spacing: .7px; }
+        .calendar-tile strong { padding-bottom: 8px; color: #5b3b35; font-family: "Manrope", sans-serif; font-size: 18px; }
+        .appointment-details h3 { margin: 0 0 5px; font-size: 14px; letter-spacing: -.25px; }
+        .appointment-details p { margin: 0; color: var(--muted); font-size: 12px; }
+        .appointment-details p span { display: inline-flex; align-items: center; gap: 4px; }
+        .appointment-details svg { width: 13px; height: 13px; vertical-align: -2px; }
+        .button-ghost { color: var(--green); background: #f1faf6; border: 0; }
+        .button-ghost:hover { background: #ddf2e9; transform: translateY(-1px); }
+
+        .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .quick-card { min-height: 135px; padding: 18px; background: #fff; border: 1px solid var(--line); border-radius: 15px; text-align: left; box-shadow: 0 7px 24px rgba(31, 72, 60, .03); transition: transform .18s, box-shadow .18s, border-color .18s; }
+        .quick-card:hover { border-color: #bde4d4; box-shadow: 0 12px 24px rgba(29, 95, 73, .08); transform: translateY(-3px); }
+        .quick-icon { display: grid; width: 34px; height: 34px; margin-bottom: 14px; place-items: center; color: var(--green); background: var(--mint); border-radius: 9px; }
+        .quick-icon.coral { color: #bd5445; background: #fff0ec; }
+        .quick-icon.blue { color: #39779a; background: #edf7fa; }
+        .quick-icon svg { width: 18px; height: 18px; }
+        .quick-card h3 { margin: 0 0 5px; color: #263633; font-size: 13px; }
+        .quick-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+        .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 7px; }
+        .metric-card { min-height: 112px; padding: 17px; background: #fff; border: 1px solid var(--line); border-radius: 15px; box-shadow: 0 7px 24px rgba(31, 72, 60, .03); }
+        .metric-card .metric-icon { display: grid; width: 29px; height: 29px; margin-bottom: 13px; place-items: center; color: var(--green); background: var(--mint); border-radius: 8px; }
+        .metric-card .metric-icon svg { width: 16px; height: 16px; }
+        .metric-card .metric-icon.coral { color: #bf5e4e; background: #fff0ed; }
+        .metric-card .metric-icon.blue { color: #33799b; background: #ecf7fb; }
+        .metric-card .metric-icon.gold { color: #9a741d; background: #fff8df; }
+        .metric-card strong { display: block; font-family: "Manrope", sans-serif; font-size: 20px; letter-spacing: -.8px; }
+        .metric-card span { color: var(--muted); font-size: 11px; }
+        .table-wrap { overflow: auto; background: #fff; border: 1px solid var(--line); border-radius: 15px; box-shadow: 0 7px 24px rgba(31, 72, 60, .03); }
+        .activity-table { width: 100%; border-collapse: collapse; min-width: 610px; text-align: left; }
+        .activity-table th { padding: 14px 18px; color: #86938e; background: #fbfdfc; border-bottom: 1px solid var(--line); font-size: 10px; letter-spacing: .7px; text-transform: uppercase; }
+        .activity-table td { padding: 14px 18px; color: #566660; border-bottom: 1px solid #edf2ef; font-size: 12px; }
+        .activity-table tr:last-child td { border-bottom: 0; }
+        .activity-table td:first-child { color: #263833; font-weight: 700; }
+        .patient-cell { display: flex; align-items: center; gap: 10px; color: #263833; font-weight: 600; }
+        .patient-avatar { display: grid; width: 27px; height: 27px; place-items: center; color: var(--green); background: var(--mint); border-radius: 50%; font-size: 10px; font-weight: 700; }
+        .status-chip { display: inline-flex; padding: 4px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+        .status-chip.scheduled { color: #176b57; background: #e7f6ef; }
+        .status-chip.completed { color: #437496; background: #edf6fa; }
+        .status-chip.pending { color: #9a741d; background: #fff7df; }
+        .status-chip.cancelled { color: #b75648; background: #fff0ed; }
+        .status-chip.available, .status-chip.admitted, .status-chip.paid { color: #176b57; background: #e7f6ef; }
+        .status-chip.occupied, .status-chip.discharged { color: #437496; background: #edf6fa; }
+        .status-chip.unpaid { color: #b75648; background: #fff0ed; }
+        .api-status { display: inline-flex; align-items: center; gap: 6px; margin-left: 11px; color: #83918c; font-size: 11px; font-weight: 600; }
+        .api-status::before { width: 6px; height: 6px; content: ""; background: #a7b4af; border-radius: 50%; }
+        .api-status.connected { color: var(--green); }
+        .api-status.connected::before { background: #45b98c; box-shadow: 0 0 0 3px #e2f7ed; }
+        .records-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+        .table-tabs { display: flex; gap: 7px; overflow: auto; padding-bottom: 2px; scrollbar-width: thin; }
+        .table-tab { flex: 0 0 auto; padding: 8px 11px; color: #71807c; background: transparent; border: 1px solid transparent; border-radius: 8px; font-size: 11px; font-weight: 700; transition: .18s ease; }
+        .table-tab:hover { color: var(--green); background: #f3faf7; }
+        .table-tab.active { color: var(--green-deep); background: var(--mint); border-color: #d5ecdf; }
+        .records-total { flex: 0 0 auto; color: #84918c; font-size: 11px; white-space: nowrap; }
+        .record-empty { padding: 35px !important; color: var(--muted) !important; text-align: center; }
+
+        .toast { position: fixed; z-index: 10; right: 25px; bottom: 24px; display: flex; align-items: center; gap: 9px; padding: 12px 16px; color: #f7fffb; background: #183d33; border-radius: 10px; box-shadow: 0 15px 35px rgba(15, 42, 34, .22); font-size: 13px; opacity: 0; pointer-events: none; transform: translateY(15px); transition: .25s ease; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast svg { width: 17px; height: 17px; color: #8fe0bd; }
+
+        @media (max-width: 1000px) {
+            .app-shell { grid-template-columns: 203px minmax(0, 1fr); }
+            .sidebar { padding-inline: 13px; }
+            main { padding-inline: 30px; }
+            .hero-grid { grid-template-columns: 1fr; }
+            .score-card { min-height: 160px; }
+            .metrics { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 720px) {
+            .app-shell { display: block; }
+            .sidebar { position: fixed; z-index: 5; bottom: 0; left: 0; right: 0; display: block; padding: 8px 10px max(8px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); border-right: 0; box-shadow: 0 -6px 20px rgba(24, 49, 41, .06); }
+            .brand, .menu-label, .side-support, .nav-link span { display: none; }
+            .nav-list { display: flex; justify-content: space-around; gap: 2px; }
+            .nav-link { display: grid; min-width: 48px; padding: 9px 10px; place-items: center; }
+            .nav-icon { width: 21px; height: 21px; }
+            main { padding: 20px 16px 88px; }
+            .topbar { margin-bottom: 29px; }
+            .mobile-brand { display: flex; align-items: center; gap: 7px; font-family: "Manrope", sans-serif; font-weight: 800; letter-spacing: -.7px; }
+            .mobile-brand .brand-mark { width: 26px; height: 26px; border-radius: 8px 8px 8px 2px; }
+            .mobile-brand .brand-mark span { font-size: 18px; }
+            .mobile-brand .brand-mark::after { transform: rotate(-45deg) translate(0px, 8px); }
+            .search { display: none; }
+            .profile { gap: 8px; }
+            .greeting { align-items: start; margin-bottom: 20px; }
+            .date-chip { display: none; }
+            h1 { font-size: 29px; }
+            .care-card { min-height: 247px; padding: 25px; }
+            .care-card h2 { max-width: 280px; font-size: 23px; }
+            .quick-grid { gap: 10px; }
+            .quick-card { min-height: 124px; padding: 13px; }
+            .quick-icon { margin-bottom: 10px; }
+            .quick-card p { display: none; }
+            .appointment-card { grid-template-columns: auto minmax(0, 1fr); gap: 12px; padding: 14px; }
+            .appointment-card .button-ghost { grid-column: 2; justify-self: start; min-height: 29px; padding: 0 10px; }
+            .metrics { gap: 10px; }
+            .metric-card { min-height: 103px; padding: 14px; }
+            .records-toolbar { align-items: flex-start; flex-direction: column; }
+        }
+        @media (max-width: 390px) {
+            .care-card p { font-size: 12px; }
+            .quick-card h3 { font-size: 11px; }
+            .score-content { gap: 13px; }
+        }
+        /* Premium product layer */
+        :root {
+            --ink: #102421;
+            --muted: #768681;
+            --line: #e4ece8;
+            --green: #11775e;
+            --green-deep: #0b5040;
+            --mint: #e5f5ee;
+            --cream: #f4f7f5;
+            --shadow: 0 18px 45px rgba(20, 52, 43, .07);
+        }
+        body { background: #edf3ef; }
+        .app-shell { max-width: 1720px; background: #f8faf8; }
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            color: #dcebe5;
+            background: linear-gradient(165deg, #102c28 0%, #0a1d1b 100%);
+            border-right: 0;
+            box-shadow: 12px 0 40px rgba(10, 32, 27, .08);
+            overflow-y: auto;
+        }
+        .brand { color: #f4fffa; }
+        .brand-mark { background: linear-gradient(135deg, #31b58d, #158064); box-shadow: 0 8px 18px rgba(32, 171, 131, .25); }
+        .menu-label { color: #78968c; }
+        .nav-link { color: #a8c0b7; }
+        .nav-link:hover { color: #ecfff6; background: rgba(218, 255, 240, .08); }
+        .nav-link.active { color: #f3fff9; background: rgba(122, 224, 185, .16); box-shadow: inset 3px 0 0 #62d4a7; }
+        .side-support { background: rgba(171, 242, 215, .1); border: 1px solid rgba(190, 249, 224, .12); box-shadow: none; }
+        .side-support::before, .side-support::after { border-color: rgba(206, 255, 235, .12); }
+        .side-support p { color: #9bcdbc; }
+        .side-support a { color: #effff8; }
+        main { position: relative; padding-top: 34px; background: radial-gradient(circle at 78% 5%, #e7f4ee 0, rgba(231,244,238,0) 26%), #f8faf8; }
+        .topbar { padding-bottom: 24px; border-bottom: 1px solid #e8efec; }
+        .search input { background: #fff; border-color: #e6eeea; box-shadow: 0 5px 14px rgba(15, 46, 37, .03); }
+        .notification { box-shadow: 0 5px 14px rgba(15, 46, 37, .05); border: 1px solid #e7efeb; }
+        .greeting { margin-top: 30px; }
+        .eyebrow { color: #168167; font-size: 10px; letter-spacing: 1.05px; }
+        h1 { font-size: clamp(30px, 3vw, 41px); letter-spacing: -2px; }
+        .subtitle { color: #788983; }
+        .date-chip { border: 1px solid #e4ece8; box-shadow: 0 4px 12px rgba(15, 46, 37, .025); }
+        .hero-grid { gap: 22px; }
+        .care-card {
+            min-height: 268px;
+            padding: 33px 35px;
+            background: radial-gradient(circle at 100% 0%, rgba(81, 206, 161, .31), transparent 28%), linear-gradient(128deg, #0a493c, #116d58 63%, #17836a);
+            border: 1px solid rgba(163, 247, 214, .16);
+            border-radius: 23px;
+            box-shadow: 0 20px 38px rgba(13, 98, 76, .18);
+        }
+        .care-card::before { width: 330px; height: 330px; top: -180px; right: -87px; border-color: rgba(236, 255, 247, .25); box-shadow: 0 0 0 26px rgba(239, 255, 249, .06), 0 0 0 65px rgba(239, 255, 249, .045); }
+        .care-card::after { width: 112px; height: 112px; right: 28px; bottom: -59px; background: #9aedca; }
+        .care-card h2 { max-width: 440px; margin-bottom: 12px; font-size: clamp(24px, 2.5vw, 33px); letter-spacing: -1.5px; }
+        .care-card p { max-width: 400px; font-size: 13px; }
+        .button-primary { min-height: 41px; padding-inline: 17px; border-radius: 10px; box-shadow: 0 8px 18px rgba(5, 49, 38, .13); }
+        .score-card { padding: 27px; border-color: #e2ebe6; border-radius: 23px; box-shadow: 0 15px 35px rgba(16, 58, 45, .06); }
+        .score-head h3, .section-heading h2 { font-size: 17px; }
+        .ring { width: 110px; height: 110px; box-shadow: inset 0 0 0 1px #dceae4; }
+        .ring::before { width: 86px; height: 86px; }
+        .ring strong { font-size: 23px; }
+        .metrics { gap: 17px; margin-top: 2px; }
+        .metric-card { position: relative; min-height: 122px; padding: 19px; overflow: hidden; border-radius: 17px; transition: transform .2s ease, box-shadow .2s ease; }
+        .metric-card::after { position: absolute; right: -20px; bottom: -30px; width: 83px; height: 83px; content: ""; background: linear-gradient(135deg, rgba(17, 119, 94, .07), transparent); border-radius: 50%; }
+        .metric-card:hover { box-shadow: 0 16px 28px rgba(17, 65, 51, .09); transform: translateY(-3px); }
+        .metric-card strong { font-size: 23px; }
+        .section-heading { margin-top: 35px; }
+        .appointment-card { padding: 19px 21px; border-radius: 17px; }
+        .calendar-tile { box-shadow: 0 5px 12px rgba(164, 80, 64, .08); }
+        .quick-card { min-height: 142px; padding: 19px; border-radius: 17px; }
+        .quick-icon { width: 37px; height: 37px; }
+        .records-toolbar { padding: 9px; background: #f1f6f3; border: 1px solid #e3ece7; border-radius: 13px; }
+        .table-tab { padding: 9px 12px; }
+        .table-tab.active { background: #fff; border-color: #e0eae4; box-shadow: 0 4px 10px rgba(20, 60, 48, .06); }
+        .table-wrap { border-radius: 17px; box-shadow: 0 12px 30px rgba(17, 65, 51, .045); }
+        .activity-table th { background: #f9fbfa; }
+        .activity-table tbody tr { transition: background .16s ease; }
+        .activity-table tbody tr:hover { background: #f7fbf9; }
+        @media (max-width: 720px) {
+            .sidebar { position: fixed; height: auto; overflow: visible; background: linear-gradient(90deg, #102c28, #0a1d1b); box-shadow: 0 -8px 24px rgba(10, 32, 27, .12); }
+            .nav-list { justify-content: flex-start; overflow-x: auto; padding: 0 3px; scrollbar-width: none; }
+            .nav-link { flex: 0 0 48px; }
+            main { padding-top: 20px; }
+            .topbar { padding-bottom: 18px; }
+            .greeting { margin-top: 24px; }
+            .care-card { min-height: 260px; padding: 27px 25px; border-radius: 19px; }
+            .score-card { border-radius: 19px; }
+            .records-toolbar { padding: 7px; }
+        }
+        .section-add { display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 0 12px; color: #f3fffa; background: var(--green); border: 0; border-radius: 8px; box-shadow: 0 6px 13px rgba(17, 119, 94, .16); font-size: 11px; font-weight: 700; transition: .18s ease; }
+        .section-add:hover { background: var(--green-deep); transform: translateY(-1px); }
+        .section-add svg { width: 14px; height: 14px; }
+        .modal-backdrop { position: fixed; z-index: 30; inset: 0; display: grid; padding: 20px; place-items: center; background: rgba(6, 25, 21, .46); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+        .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+        .modal-panel { width: min(650px, 100%); max-height: min(760px, calc(100vh - 40px)); overflow: auto; background: #fff; border: 1px solid rgba(255, 255, 255, .62); border-radius: 19px; box-shadow: 0 26px 75px rgba(3, 25, 20, .28); transform: translateY(12px) scale(.985); transition: transform .22s ease; }
+        .modal-backdrop.open .modal-panel { transform: translateY(0) scale(1); }
+        .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 23px 25px 18px; border-bottom: 1px solid var(--line); }
+        .modal-kicker { margin: 0 0 5px; color: var(--green); font-size: 10px; font-weight: 800; letter-spacing: .85px; text-transform: uppercase; }
+        .modal-head h2 { margin: 0; font-family: "Manrope", sans-serif; font-size: 21px; letter-spacing: -.9px; }
+        .modal-close { display: grid; flex: 0 0 auto; width: 31px; height: 31px; place-items: center; color: #5f716a; background: #f3f7f5; border: 0; border-radius: 8px; font-size: 20px; line-height: 1; }
+        .modal-close:hover { color: #233a33; background: #e8efeb; }
+        .record-form { padding: 22px 25px 25px; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+        .form-field { display: grid; gap: 7px; }
+        .form-field.wide { grid-column: 1 / -1; }
+        .form-field label { color: #40524b; font-size: 11px; font-weight: 700; }
+        .form-field input, .form-field select, .form-field textarea { width: 100%; min-height: 39px; padding: 9px 10px; color: var(--ink); outline: 0; background: #fbfdfc; border: 1px solid #dbe7e1; border-radius: 8px; font-family: inherit; font-size: 12px; transition: border-color .18s, box-shadow .18s; }
+        .form-field textarea { min-height: 75px; resize: vertical; }
+        .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #65bda0; box-shadow: 0 0 0 3px rgba(24, 127, 99, .1); }
+        .form-help { margin: 15px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; }
+        .modal-cancel, .modal-submit { min-height: 38px; padding: 0 14px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+        .modal-cancel { color: #557068; background: #f0f5f2; border: 1px solid #e0ebe5; }
+        .modal-submit { color: #fff; background: var(--green); border: 1px solid var(--green); }
+        .modal-submit:hover { background: var(--green-deep); }
+        .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 22px 25px; }
+        .detail-item { padding: 13px; background: #f6faf8; border: 1px solid #e4eee9; border-radius: 10px; }
+        .detail-item span { display: block; margin-bottom: 5px; color: #81908a; font-size: 10px; font-weight: 700; letter-spacing: .55px; text-transform: uppercase; }
+        .detail-item strong { display: block; color: #233a33; font-size: 13px; }
+        @media (max-width: 520px) { .form-grid, .detail-grid { grid-template-columns: 1fr; } .modal-head, .record-form { padding-inline: 18px; } }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#home" aria-label="SmartCare home">
+            <span class="brand-mark"><span>+</span></span> SmartCare
+        </a>
+        <p class="menu-label">Menu</p>
+        <nav>
+            <ul class="nav-list">
+                <li><a class="nav-link active" href="#home"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Overview</span></a></li>
+                <li><a class="nav-link" data-table="patients" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0M17 11a3 3 0 0 0 0-6M20.5 18.5a5.5 5.5 0 0 0-3-5"/></svg><span>Patients</span></a></li>
+                <li><a class="nav-link" data-table="doctors" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 21a7 7 0 0 1 14 0M19 8h3M20.5 6.5v3"/></svg><span>Doctors</span></a></li>
+                <li><a class="nav-link" data-table="departments" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16M8 21v-5h8v5M8 7h2M14 7h2M8 11h2M14 11h2"/></svg><span>Departments</span></a></li>
+                <li><a class="nav-link" data-table="appointments" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span>Appointments</span></a></li>
+                <li><a class="nav-link" data-table="rooms" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 21V4h16v17M8 21v-6h8v6M8 8h2M14 8h2M8 12h2M14 12h2"/></svg><span>Rooms</span></a></li>
+                <li><a class="nav-link" data-table="admissions" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 3v18M6 9h12M5 21h14M7 3h10"/></svg><span>Admissions</span></a></li>
+                <li><a class="nav-link" data-table="treatments" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/><circle cx="12" cy="12" r="8"/></svg><span>Treatment records</span></a></li>
+                <li><a class="nav-link" data-table="labTests" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M8 15h8"/></svg><span>Lab tests</span></a></li>
+                <li><a class="nav-link" data-table="bills" href="#patients"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 2h12v20H6zM9 7h6M9 11h6M9 16h2M14 16h1"/></svg><span>Billing</span></a></li>
+            </ul>
+        </nav>
+        <div class="side-support">
+            <p>SmartCare support</p>
+            <strong>Need a hand?</strong>
+            <a href="#support">Contact the team <span>→</span></a>
+        </div>
+    </aside>
+
+    <main id="home">
+        <header class="topbar">
+            <div class="mobile-brand"><span class="brand-mark"><span>+</span></span> SmartCare</div>
+            <label class="search" aria-label="Search SmartCare">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.35-4.35"/></svg>
+                <input type="search" placeholder="Search doctors, services..." />
+            </label>
+            <div class="profile">
+                <button class="notification" type="button" aria-label="View notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></button>
+            </div>
+        </header>
+
+        <section class="greeting" aria-labelledby="welcome-title">
+            <div>
+                <p class="eyebrow">SmartCare Hospital System <span class="api-status" id="api-status">Demo data</span></p>
+                <h1 id="welcome-title">Good morning, Administrator.</h1>
+                <p class="subtitle">Here’s a live view of your hospital operations today.</p>
+            </div>
+            <div class="date-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg> Tuesday, June 18</div>
+        </section>
+
+        <section class="hero-grid" aria-label="Health overview">
+            <article class="care-card">
+                <div class="care-content">
+                    <p class="eyebrow">One place. Every care team.</p>
+                    <h2>Keep your hospital running in perfect sync.</h2>
+                    <p>Monitor real-time patient admissions, track doctor availability, manage billing, and keep department operations smooth across every ward.</p>
+                    <button class="button-primary" id="open-record-modal" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        Add New Record
+                    </button>
+                </div>
+            </article>
+
+            <article class="score-card" aria-label="Operational Efficiency Score">
+                <div class="score-head">
+                    <h3>System Health</h3>
+                    <span>Optimal</span>
+                </div>
+                <div class="score-content">
+                    <div class="ring" aria-hidden="true">
+                        <div>
+                            <strong>98%</strong>
+                            <small>Uptime</small>
+                        </div>
+                    </div>
+                    <div class="score-copy">
+                        <p>Operational Efficiency</p>
+                        <span>All 10 hospital API modules connected and operating with low latency.</span>
+                        <a class="score-link" href="#patients">View Metrics →</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Key Metrics Section -->
+        <section aria-label="Metrics Dashboard">
+            <div class="metrics">
+                <article class="metric-card">
+                    <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg></div>
+                    <strong>16</strong>
+                    <span>Active Patients</span>
+                </article>
+                <article class="metric-card">
+                    <div class="metric-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                    <strong>6</strong>
+                    <span>Doctors On-Duty</span>
+                </article>
+                <article class="metric-card">
+                    <div class="metric-icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+                    <strong>12</strong>
+                    <span>Wards & Rooms</span>
+                </article>
+                <article class="metric-card">
+                    <div class="metric-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                    <strong>LKR 28.3k</strong>
+                    <span>Pending Billing</span>
+                </article>
+            </div>
+        </section>
+
+        <!-- Operations Data Section -->
+        <section id="patients" aria-label="Management Records">
+            <div class="section-heading">
+                <h2>Hospital Operations Records</h2>
+                <button class="section-add" id="open-record-modal-alt" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    Add Record
+                </button>
+            </div>
+
+            <div class="records-toolbar">
+                <div class="table-tabs" role="tablist">
+                    <button class="table-tab active" data-tab="patients" type="button">Patients</button>
+                    <button class="table-tab" data-tab="doctors" type="button">Doctors</button>
+                    <button class="table-tab" data-tab="departments" type="button">Departments</button>
+                    <button class="table-tab" data-tab="appointments" type="button">Appointments</button>
+                    <button class="table-tab" data-tab="rooms" type="button">Rooms</button>
+                    <button class="table-tab" data-tab="admissions" type="button">Admissions</button>
+                    <button class="table-tab" data-tab="treatments" type="button">Treatment Records</button>
+                    <button class="table-tab" data-tab="labTests" type="button">Lab Tests</button>
+                    <button class="table-tab" data-tab="bills" type="button">Billing</button>
+                </div>
+                <span class="records-total" id="records-count">Showing 3 records</span>
+            </div>
+
+            <div class="table-wrap">
+                <table class="activity-table" id="data-table">
+                    <thead id="table-head">
+                    <!-- Populated dynamically via JS -->
+                    </thead>
+                    <tbody id="table-body">
+                    <!-- Populated dynamically via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Modal Component for Adding Records -->
+<div class="modal-backdrop" id="modal-backdrop" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-labelledby="modal-title">
+        <div class="modal-head">
+            <div>
+                <p class="modal-kicker">Hospital Management System</p>
+                <h2 id="modal-title">Add New Record</h2>
+            </div>
+            <button class="modal-close" id="modal-close" type="button" aria-label="Close modal">&times;</button>
+        </div>
+        <form class="record-form" id="record-form">
+            <div class="form-grid" id="form-fields">
+                <!-- Populated dynamically based on selected tab -->
+            </div>
+            <p class="form-help">Ensure all details match the SmartCare Hospital API payload requirements.</p>
+            <div class="modal-actions">
+                <button class="modal-cancel" id="modal-cancel" type="button">Cancel</button>
+                <button class="modal-submit" type="submit">Save Record</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <span id="toast-message">Record created successfully!</span>
+</div>
+
+<script>
+    // Initial State Data synced from API schema
+    const store = {
+        activeTab: 'patients',
+        patients: [
+            { patientId: "P1", fullName: "Kusal Mendis", dob: "1995-02-16", gender: "Male", address: "Colombo", contactNumber: "0771112223", bloodGroup: "A+", emergencyContact: "0770000001" },
+            { patientId: "P3", fullName: "Nimasha Sandamali", dob: "2002-03-15", gender: "Female", address: "Galle", contactNumber: "0770000016", bloodGroup: "O+", emergencyContact: "0777654321" },
+            { patientId: "P8", fullName: "Pathum Nissanka", dob: "1998-05-18", gender: "Male", address: "Kandy", contactNumber: "0778889900", bloodGroup: "B+", emergencyContact: "0771239876" }
+        ],
+        doctors: [
+            { doctorId: "DO1", doctorName: "Dr. Nimal Perera", specialization: "Cardiologist", qualification: "MBBS, MD", contactNumber: "0771234567", consultationFee: "3500.00", departmentId: "DE1" },
+            { doctorId: "DO4", doctorName: "Dr. Anura Jayasinghe", specialization: "Radiologist", qualification: "MBBS, MS", contactNumber: "0784567890", consultationFee: "3000.00", departmentId: "DE5" },
+            { doctorId: "DO6", doctorName: "Dr. Sunil Perera", specialization: "Neurologist", qualification: "MBBS, MD", contactNumber: "0715865655", consultationFee: "3500.00", departmentId: "DE6" }
+        ],
+        departments: [
+            { departmentId: "DE1", departmentName: "Cardiology", location: "Block A - Level 1", headDoctor: "DO1" },
+            { departmentId: "DE2", departmentName: "Neurology", location: "Block B - Level 2", headDoctor: "DO6" },
+            { departmentId: "DE3", departmentName: "Orthopedics", location: "Block C - Level 1", headDoctor: "DO4" }
+        ],
+        appointments: [
+            { appointmentId: "A2", patientId: "P2", doctorId: "DO2", appointmentDate: "2026-07-10", appointmentTime: "09:30", consultationRoom: "CR-101", appointmentStatus: "Canceled" },
+            { appointmentId: "A3", patientId: "P3", doctorId: "DO4", appointmentDate: "2026-07-10", appointmentTime: "10:30", consultationRoom: "CR-102", appointmentStatus: "Scheduled" },
+            { appointmentId: "A4", patientId: "P4", doctorId: "DO3", appointmentDate: "2026-07-11", appointmentTime: "08:00", consultationRoom: "CR-103", appointmentStatus: "Scheduled" }
+        ],
+        rooms: [
+            { roomId: "GW-201", category: "General Ward", roomAvailability: "Available", chargePerDay: "3000.00" },
+            { roomId: "GW-202", category: "General Ward", roomAvailability: "Occupied", chargePerDay: "3000.00" },
+            { roomId: "ICU-01", category: "ICU", roomAvailability: "Available", chargePerDay: "7000.00" }
+        ],
+        admissions: [
+            { admissionId: "ADM1", patientId: "P15", roomId: "PR-101", admissionDate: "2026-07-20", bedNo: "Bed-1", admissionStatus: "Admitted", dischargeDate: "-" },
+            { admissionId: "ADM2", patientId: "P8", roomId: "GW-201", admissionDate: "2026-07-17", bedNo: "Bed-B", admissionStatus: "Admitted", dischargeDate: "-" },
+            { admissionId: "ADM6", patientId: "P8", roomId: "PR-102", admissionDate: "2026-08-26", bedNo: "Bed-3", admissionStatus: "Discharged", dischargeDate: "2026-08-30" }
+        ],
+        treatments: [
+            { treatmentId: "T2", patientId: "P3", doctorId: "DO4", treatmentDate: "2026-08-29", diagnosis: "Wrist Pain Follow-up", prescriptionDetails: "Paracetamol 500mg", treatmentNotes: "Advised follow-up" },
+            { treatmentId: "T4", patientId: "P5", doctorId: "DO5", treatmentDate: "2026-07-21", diagnosis: "Chest Radiograph Findings", prescriptionDetails: "N/A - Imaging Diagnostic", treatmentNotes: "Minor pulmonary congestion" }
+        ],
+        labTests: [
+            { labTestId: "L2", patientId: "P3", doctorId: "DO4", testName: "ESR & Full Blood Count", testDate: "2026-07-12", testResult: "Normal", technicianName: "Ruwan Silva", labTestStatus: "Completed", testCharge: "2000.00" },
+            { labTestId: "L3", patientId: "P14", doctorId: "DO5", testName: "X-Ray Chest", testDate: "2026-07-16", testResult: "Clear", technicianName: "Nalaka Fernando", labTestStatus: "Completed", testCharge: "2500.00" }
+        ],
+        bills: [
+            { billId: "B6", patientId: "P7", appointmentId: "A7", billDate: "2026-07-13", consultationCharges: "3000.00", roomCharges: "0.00", labCharges: "0.00", medicineCharges: "800.00", totalAmount: "3800.00", paymentStatus: "Paid", paymentMethod: "Cash" },
+            { billId: "B10", patientId: "P14", appointmentId: "A15", billDate: "2026-07-16", consultationCharges: "3000.00", roomCharges: "0.00", labCharges: "2500.00", medicineCharges: "1500.00", totalAmount: "7500.00", paymentStatus: "Paid", paymentMethod: "Online" },
+            { billId: "B13", patientId: "P3", appointmentId: "A3", billDate: "2026-08-29", consultationCharges: "4000.00", roomCharges: "0.00", labCharges: "1500.00", medicineCharges: "2000.00", totalAmount: "7500.00", paymentStatus: "Pending", paymentMethod: "-" }
+        ]
+    };
+
+    const schema = {
+        patients: { title: "Patient", fields: [
+                { name: "patientId", label: "Patient ID", type: "text", req: true },
+                { name: "fullName", label: "Full Name", type: "text", req: true },
+                { name: "dob", label: "Date of Birth", type: "date", req: true },
+                { name: "gender", label: "Gender", type: "select", options: ["Male", "Female", "Other"], req: true },
+                { name: "bloodGroup", label: "Blood Group", type: "select", options: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"], req: true },
+                { name: "contactNumber", label: "Contact Phone", type: "text", req: true },
+                { name: "emergencyContact", label: "Emergency Contact", type: "text", req: true },
+                { name: "address", label: "Address", type: "text", req: true }
+            ]},
+        doctors: { title: "Doctor", fields: [
+                { name: "doctorId", label: "Doctor ID", type: "text", req: true },
+                { name: "doctorName", label: "Doctor Name", type: "text", req: true },
+                { name: "specialization", label: "Specialization", type: "text", req: true },
+                { name: "qualification", label: "Qualification", type: "text", req: true },
+                { name: "contactNumber", label: "Contact Phone", type: "text", req: true },
+                { name: "consultationFee", label: "Consultation Fee (LKR)", type: "number", req: true },
+                { name: "departmentId", label: "Department ID", type: "text", req: true }
+            ]},
+        departments: { title: "Department", fields: [
+                { name: "departmentId", label: "Department ID", type: "text", req: true },
+                { name: "departmentName", label: "Department Name", type: "text", req: true },
+                { name: "location", label: "Location/Building", type: "text", req: true },
+                { name: "headDoctor", label: "Head Doctor ID", type: "text", req: true }
+            ]},
+        appointments: { title: "Appointment", fields: [
+                { name: "appointmentId", label: "Appointment ID", type: "text", req: true },
+                { name: "patientId", label: "Patient ID", type: "text", req: true },
+                { name: "doctorId", label: "Doctor ID", type: "text", req: true },
+                { name: "appointmentDate", label: "Date", type: "date", req: true },
+                { name: "appointmentTime", label: "Time", type: "time", req: true },
+                { name: "consultationRoom", label: "Room", type: "text", req: true },
+                { name: "appointmentStatus", label: "Status", type: "select", options: ["Scheduled", "Completed", "Canceled"], req: true }
+            ]},
+        rooms: { title: "Room", fields: [
+                { name: "roomId", label: "Room ID", type: "text", req: true },
+                { name: "category", label: "Category", type: "select", options: ["General Ward", "ICU", "Private Room", "Operating Theater"], req: true },
+                { name: "roomAvailability", label: "Availability Status", type: "select", options: ["Available", "Occupied", "Under Maintenance"], req: true },
+                { name: "chargePerDay", label: "Charge Per Day (LKR)", type: "number", req: true }
+            ]},
+        admissions: { title: "Admission", fields: [
+                { name: "admissionId", label: "Admission ID", type: "text", req: true },
+                { name: "patientId", label: "Patient ID", type: "text", req: true },
+                { name: "roomId", label: "Room ID", type: "text", req: true },
+                { name: "bedNo", label: "Bed Number", type: "text", req: true },
+                { name: "admissionDate", label: "Admission Date", type: "date", req: true },
+                { name: "dischargeDate", label: "Discharge Date", type: "date" },
+                { name: "admissionStatus", label: "Status", type: "select", options: ["Admitted", "Discharged"], req: true }
+            ]},
+        treatments: { title: "Treatment Record", fields: [
+                { name: "treatmentId", label: "Treatment ID", type: "text", req: true },
+                { name: "patientId", label: "Patient ID", type: "text", req: true },
+                { name: "doctorId", label: "Doctor ID", type: "text", req: true },
+                { name: "treatmentDate", label: "Date", type: "date", req: true },
+                { name: "diagnosis", label: "Diagnosis", type: "text", req: true },
+                { name: "prescriptionDetails", label: "Prescription", type: "text", req: true },
+                { name: "treatmentNotes", label: "Clinical Notes", type: "textarea" }
+            ]},
+        labTests: { title: "Lab Test", fields: [
+                { name: "labTestId", label: "Lab Test ID", type: "text", req: true },
+                { name: "patientId", label: "Patient ID", type: "text", req: true },
+                { name: "doctorId", label: "Doctor ID", type: "text", req: true },
+                { name: "testName", label: "Test Name", type: "text", req: true },
+                { name: "testDate", label: "Date", type: "date", req: true },
+                { name: "technicianName", label: "Technician", type: "text", req: true },
+                { name: "testResult", label: "Test Result", type: "text", req: true },
+                { name: "testCharge", label: "Charge (LKR)", type: "number", req: true },
+                { name: "labTestStatus", label: "Status", type: "select", options: ["Pending", "In Progress", "Completed"], req: true }
+            ]},
+        bills: { title: "Bill", fields: [
+                { name: "billId", label: "Bill ID", type: "text", req: true },
+                { name: "patientId", label: "Patient ID", type: "text", req: true },
+                { name: "appointmentId", label: "Appointment ID", type: "text", req: true },
+                { name: "billDate", label: "Bill Date", type: "date", req: true },
+                { name: "consultationCharges", label: "Consultation Charge", type: "number", req: true },
+                { name: "roomCharges", label: "Room Charge", type: "number", req: true },
+                { name: "labCharges", label: "Lab Charge", type: "number", req: true },
+                { name: "medicineCharges", label: "Medicine Charge", type: "number", req: true },
+                { name: "totalAmount", label: "Total Amount", type: "number", req: true },
+                { name: "paymentStatus", label: "Payment Status", type: "select", options: ["Paid", "Pending", "Failed"], req: true },
+                { name: "paymentMethod", label: "Payment Method", type: "select", options: ["Cash", "Online", "Insurance", "Credit Card"] }
+            ]}
+    };
+
+    // UI Render Controller
+    function renderTable(tabKey) {
+        const records = store[tabKey] || [];
+        const config = schema[tabKey];
+        const thead = document.getElementById('table-head');
+        const tbody = document.getElementById('table-body');
+        const totalCount = document.getElementById('records-count');
+
+        totalCount.textContent = `Showing ${records.length} ${records.length === 1 ? 'record' : 'records'}`;
+
+        if (!config) return;
+
+        // Render Header
+        let headHtml = '<tr>';
+        config.fields.slice(0, 5).forEach(field => {
+            headHtml += `<th>${field.label}</th>`;
+        });
+        headHtml += '<th>Status / Action</th></tr>';
+        thead.innerHTML = headHtml;
+
+        // Render Body
+        if (records.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="${config.fields.slice(0, 5).length + 1}" class="record-empty">No records found for ${config.title}. Click 'Add Record' to create one.</td></tr>`;
+            return;
+        }
+
+        let bodyHtml = '';
+        records.forEach((row, idx) => {
+            bodyHtml += '<tr>';
+            const visibleFields = config.fields.slice(0, 5);
+            visibleFields.forEach((field, fIdx) => {
+                const val = row[field.name] || '-';
+                if (fIdx === 0) {
+                    bodyHtml += `<td><strong>${val}</strong></td>`;
+                } else {
+                    bodyHtml += `<td>${val}</td>`;
+                }
+            });
+
+            // Status or fallback chip
+            const statusVal = row.appointmentStatus || row.roomAvailability || row.admissionStatus || row.labTestStatus || row.paymentStatus || 'Active';
+            const chipClass = String(statusVal).toLowerCase();
+            bodyHtml += `<td><span class="status-chip ${chipClass}">${statusVal}</span></td>`;
+            bodyHtml += '</tr>';
+        });
+
+        tbody.innerHTML = bodyHtml;
+    }
+
+    function renderModalFields(tabKey) {
+        const config = schema[tabKey];
+        const formFieldsContainer = document.getElementById('form-fields');
+        const modalTitle = document.getElementById('modal-title');
+
+        modalTitle.textContent = `Add New ${config.title}`;
+        let fieldsHtml = '';
+
+        config.fields.forEach(field => {
+            const isWide = field.type === 'textarea';
+            fieldsHtml += `<div class="form-field ${isWide ? 'wide' : ''}">`;
+            fieldsHtml += `<label for="field-${field.name}">${field.label}${field.req ? ' *' : ''}</label>`;
+
+            if (field.type === 'select') {
+                fieldsHtml += `<select id="field-${field.name}" name="${field.name}" ${field.req ? 'required' : ''}>`;
+                fieldsHtml += `<option value="">Select ${field.label}</option>`;
+                field.options.forEach(opt => {
+                    fieldsHtml += `<option value="${opt}">${opt}</option>`;
+                });
+                fieldsHtml += `</select>`;
+            } else if (field.type === 'textarea') {
+                fieldsHtml += `<textarea id="field-${field.name}" name="${field.name}" rows="3" ${field.req ? 'required' : ''}></textarea>`;
+            } else {
+                fieldsHtml += `<input id="field-${field.name}" type="${field.type}" name="${field.name}" ${field.req ? 'required' : ''} />`;
+            }
+
+            fieldsHtml += `</div>`;
+        });
+
+        formFieldsContainer.innerHTML = fieldsHtml;
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-message').textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // Event Handlers
+    document.addEventListener('DOMContentLoaded', () => {
+        renderTable(store.activeTab);
+
+        // Navigation & Tab Switching
+        document.querySelectorAll('.table-tab, .nav-link[data-table]').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const targetTab = tab.getAttribute('data-tab') || tab.getAttribute('data-table');
+                if (!targetTab) return;
+
+                store.activeTab = targetTab;
+
+                document.querySelectorAll('.table-tab').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-tab') === targetTab);
+                });
+                document.querySelectorAll('.nav-link').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-table') === targetTab);
+                });
+
+                renderTable(targetTab);
+            });
+        });
+
+        // Modal Handling
+        const modal = document.getElementById('modal-backdrop');
+        const openModalBtn = document.getElementById('open-record-modal');
+        const openModalAltBtn = document.getElementById('open-record-modal-alt');
+        const closeModalBtn = document.getElementById('modal-close');
+        const cancelModalBtn = document.getElementById('modal-cancel');
+        const recordForm = document.getElementById('record-form');
+
+        const openModal = () => {
+            renderModalFields(store.activeTab);
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+        };
+
+        const closeModal = () => {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            recordForm.reset();
+        };
+
+        openModalBtn.addEventListener('click', openModal);
+        openModalAltBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Form Submission
+        recordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(recordForm);
+            const newRecord = {};
+            formData.forEach((val, key) => { newRecord[key] = val; });
+
+            if (!store[store.activeTab]) store[store.activeTab] = [];
+            store[store.activeTab].unshift(newRecord);
+
+            renderTable(store.activeTab);
+            closeModal();
+            showToast(`New ${schema[store.activeTab].title} record added successfully!`);
+        });
+    });
+</script>
+</body>
+</html>
